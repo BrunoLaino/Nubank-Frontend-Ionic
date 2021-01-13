@@ -1,5 +1,12 @@
 import { Component, Renderer2, ViewChild } from "@angular/core";
-import { Animation, AnimationController, Gesture, GestureController, GestureDetail, Platform } from "@ionic/angular";
+import {
+  Animation,
+  AnimationController,
+  Gesture,
+  GestureController,
+  GestureDetail,
+  Platform,
+} from "@ionic/angular";
 
 @Component({
   selector: "app-home",
@@ -51,32 +58,35 @@ export class HomePage {
     this.detectSwipe();
   }
 
-  detectSwipe(){
-    this.gesture = this.gestureCtrl.create({
-      el: this.swipeDown.el,
-      gestureName: 'swipe-down',
-      threshold: 0,
-      onMove: ev => this.onMove(ev),
-      onEnd: ev => this.onEnd(ev)
-    }, true);
+  detectSwipe() {
+    this.gesture = this.gestureCtrl.create(
+      {
+        el: this.swipeDown.el,
+        gestureName: "swipe-down",
+        threshold: 0,
+        onMove: (ev) => this.onMove(ev),
+        onEnd: (ev) => this.onEnd(ev),
+      },
+      true
+    );
 
     this.gesture.enable(true);
   }
 
-  onMove(ev: GestureDetail){
-    if(!this.swiping){
-      this.animation.direction('normal').progressStart(true);
+  onMove(ev: GestureDetail) {
+    if (!this.swiping) {
+      this.animation.direction("normal").progressStart(true);
 
       this.swiping = true;
     }
 
     const step: number = this.getStep(ev);
-    
+
     this.animation.progressStep(step);
     this.setBackgroundOpacity(step);
   }
 
-  onEnd(ev: GestureDetail){
+  onEnd(ev: GestureDetail) {
     if (!this.swiping) return;
 
     this.gesture.enable(false);
@@ -93,7 +103,7 @@ export class HomePage {
     this.swiping = false;
   }
 
-  getStep(ev: GestureDetail) : number{
+  getStep(ev: GestureDetail): number {
     const delta: number = this.initialStep + ev.deltaY;
 
     return delta / this.maxTranslate;
@@ -124,12 +134,15 @@ export class HomePage {
       .onFinish(() => this.gesture.enable(true));
   }
 
-  setBackgroundOpacity(value: number = null){
-    this.renderer.setStyle(this.background.nativeElement, 'opacity', value ? value : this.initialStep === 0 ? '0' : '1');
+  setBackgroundOpacity(value: number = null) {
+    this.renderer.setStyle(
+      this.background.nativeElement,
+      "opacity",
+      value ? value : this.initialStep === 0 ? "0" : "1"
+    );
   }
 
-  fixedBlocks(): Boolean{
+  fixedBlocks(): Boolean {
     return this.swiping || this.initialStep === this.maxTranslate;
   }
-
 }
